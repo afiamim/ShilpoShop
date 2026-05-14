@@ -29,6 +29,7 @@ urlpatterns = [
     path('users/', include('users_app.urls')),
     path('reviews/', include('reviews_app.urls')),
     path('payments/', include('payments_app.urls')),
+    path('', views.home, name='home'),
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
