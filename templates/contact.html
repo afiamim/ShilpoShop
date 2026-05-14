@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Contact - ShilpoShop{% endblock %}
+
+{% block content %}
+
+<div class="page-heading">
+    <h1>Contact Us</h1>
+</div>
+
+<div class="two-col">
+
+    <div class="white-box">
+        <div class="white-box-header">Get In Touch</div>
+        <div class="white-box-body" style="font-size:14px; line-height:2.2; color:#444;">
+            <p>&#128231; <strong>Email:</strong> support@shilposhop.com</p>
+            <p>&#128222; <strong>Phone:</strong> +880 1537-224378</p>
+            <p>&#128205; <strong>Address:</strong> 408/2, north kazipara Dhaka-1205</p>
+            <p>&#128336; <strong>Hours:</strong> Sat-Thu, 9 AM - 6 PM</p>
+            <hr>
+            <p style="font-size:13px; color:#666;">
+                For wholesale or artisan partnership enquiries, please use
+                the form or email us directly. We reply within 24 hours.
+            </p>
+        </div>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="white-box">
+        <div class="white-box-header">Send a Message</div>
+        <div class="white-box-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="field-row">
+                    <label>Full Name</label>
+                    <input type="text" name="name" placeholder="Your name" required>
+                </div>
+                <div class="field-row">
+                    <label>Email Address</label>
+                    <input type="email" name="email" placeholder="your@email.com" required>
+                </div>
+                <div class="field-row">
+                    <label>Subject</label>
+                    <select name="subject">
+                        <option>General Inquiry</option>
+                        <option>Order Issue</option>
+                        <option>Artisan Partnership</option>
+                        <option>Wholesale</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="field-row">
+                    <label>Message</label>
+                    <textarea name="message" rows="4" placeholder="Write your message..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-green btn-block">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
