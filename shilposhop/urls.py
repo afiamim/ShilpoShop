@@ -18,21 +18,18 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-#from . import views
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('about/', views.about, name='about'),
+    path('contact/', views.contact, name='contact'),
     path('products/', include('products_app.urls')),
     path('cart/', include('cart_app.urls')),
-<<<<<<< HEAD
-<<<<<<< HEAD
     path('invite/', include('invite_app.urls')),
-=======
     path('orders/', include('orders_app.urls')),
->>>>>>> 943836fb5c2fbc25980568eddabd673115d3075b
-=======
     path('orders/', include('orders_app.urls')),
->>>>>>> ed870bc435b70d122e329176817323859c94b766
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
