@@ -24,11 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('products/', include('products_app.urls')),
     path('cart/', include('cart_app.urls')),
-<<<<<<< HEAD
     path('invite/', include('invite_app.urls')),
-=======
     path('orders/', include('orders_app.urls')),
->>>>>>> 943836fb5c2fbc25980568eddabd673115d3075b
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
