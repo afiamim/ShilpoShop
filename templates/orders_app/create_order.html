@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block title %}Place Order - {{ product.product_name }}{% endblock %}
+
+{% block content %}
+
+<p style="margin-bottom:16px;">
+    <a href="{% url 'product_detail' product.id %}">&larr; Back to Product</a>
+</p>
+
+<div class="two-col">
+
+ >
+    <div class="white-box">
+        <div class="white-box-header">Product Summary</div>
+        <div class="white-box-body">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.product_name }}"
+                     style="width:100%; max-height:200px; object-fit:cover;
+                            border-radius:4px; margin-bottom:12px;">
+            {% endif %}
+            <h3 style="margin-bottom:6px;">{{ product.product_name }}</h3>
+            <p style="font-size:14px; color:#555; margin-bottom:8px;">
+                {{ product.description|truncatewords:20 }}
+            </p>
+            <p style="font-size:20px; font-weight:bold; color:#c62828;">
+                &#2547; {{ product.price }}
+            </p>
+            <p style="color:#2e7d32; margin-top:4px; font-size:13px;">
+                &#10003; {{ product.stock }} in stock
+            </p>
+        </div>
+    </div>
+
+
+    <div class="form-container" style="margin:0;">
+        <h2>Confirm Your Order</h2>
+
+        <form method="POST" novalidate>
+            {% csrf_token %}
+
+
+            <div class="field-row">
+                <label>Quantity</label>
+                {{ form.quantity }}
+                {% if form.quantity.errors %}
+                    {% for error in form.quantity.errors %}
+                        <div class="form-error">{{ error }}</div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+
+            <div class="field-row" style="margin-top:14px;">
+                <label>
+                    &#127873; Discount Coupon Code
+                    <span style="font-weight:normal; color:#777;">(optional)</span>
+                </label>
+
+                {{ form.discount_code }}
+
+                {% if discount_error %}
+                    <div class="form-error" style="margin-top:4px;">
+                        {{ discount_error }}
+                    </div>
+                {% endif %}
+
+
+                {% if user_discount_active %}
+                    <div style="background:#e8f5e9; border:1px solid #a5d6a7;
+                                border-radius:4px; padding:8px 12px; margin-top:6px;
+                                font-size:13px; color:#1b5e20;">
+                        &#127881; You have an active <strong>5% discount coupon</strong>!
+                        Your code:
+                        <strong style="font-family:monospace; letter-spacing:2px;">
+                            {{ user_discount_code }}
+                        </strong>
+                        — enter it above to save 5%.
+                    </div>
+                {% else %}
+                    <p class="text-muted" style="margin-top:5px; font-size:12px;">
+                        Earn a coupon by inviting 3 friends under
+                        <a href="{% url 'invite_home' %}">Invite &amp; Earn</a>.
+                    </p>
+                {% endif %}
+            </div>
+
+            <p style="font-size:13px; color:#777; margin:14px 0 10px;">
+                Total = Price &times; Quantity. 5% off if you enter your coupon code.
+            </p>
+
+            <button type="submit" class="btn btn-green btn-block">
+                Place Order
+            </button>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Cancel Order - ShilpoShop{% endblock %}
+
+{% block content %}
+<div class="confirm-box">
+    <h2>Cancel Order</h2>
+    <p>
+        Are you sure you want to cancel your order for
+        <strong>{{ order.product.product_name }}</strong>?
+        (&#2547; {{ order.total_price }})
+    </p>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="flex gap-1">
+            <button type="submit" class="btn btn-red">Yes, Cancel Order</button>
+            <a href="{% url 'order_list' %}" class="btn btn-gray">Go Back</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

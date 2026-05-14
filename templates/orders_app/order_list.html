@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}My Orders - ShilpoShop{% endblock %}
+
+{% block content %}
+
+<div class="page-heading">
+    <div>
+        <h1>{% if user.is_staff %}All Orders{% else %}My Orders{% endif %}</h1>
+        <p>{{ orders|length }} order(s) found</p>
+    </div>
+    {% if not user.is_staff %}
+        <a href="{% url 'product_list' %}" class="btn btn-outline-green btn-sm">Shop More</a>
+    {% endif %}
+</div>
+
+{% if orders %}
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                {% if user.is_staff %}<th>Customer</th>{% endif %}
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th>Discount</th>
+                <th>You Pay</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td><strong>#{{ order.id }}</strong></td>
+                {% if user.is_staff %}<td>{{ order.user.username }}</td>{% endif %}
+                <td>
+                    <a href="{% url 'product_detail' order.product.id %}">
+                        {{ order.product.product_name }}
+                    </a>
+                </td>
+                <td>{{ order.quantity }}</td>
+                <td>&#2547; {{ order.total_price }}</td>
+                <td>
+                    {% if order.discount_amount > 0 %}
+                        <span class="badge badge-green">-&#2547; {{ order.discount_amount }}</span>
+                    {% else %}
+                        <span style="color:#aaa;">—</span>
+                    {% endif %}
+                </td>
+                <td><strong style="color:#c62828;">&#2547; {{ order.final_price }}</strong></td>
+                <td>
+                    {% if order.status == "Delivered" %}
+                        <span class="badge badge-green">{{ order.status }}</span>
+                    {% elif order.status == "Cancelled" %}
+                        <span class="badge badge-red">{{ order.status }}</span>
+                    {% elif order.status == "Processing" %}
+                        <span class="badge badge-blue">{{ order.status }}</span>
+                    {% else %}
+                        <span class="badge badge-orange">{{ order.status }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if not user.is_staff %}
+                        {% if order.status == "Pending" %}
+                            <a href="{% url 'payment_create' order.id %}" class="btn btn-green btn-sm">Pay</a>
+                        {% endif %}
+                        <a href="{% url 'delete_order' order.id %}" class="btn btn-red btn-sm">Cancel</a>
+                    {% else %}
+                        <a href="{% url 'delete_order' order.id %}" class="btn btn-red btn-sm">Delete</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% else %}
+<div class="empty-state">
+    <div class="empty-icon">&#128203;</div>
+    <p>No orders yet.</p>
+    {% if not user.is_staff %}
+        <a href="{% url 'product_list' %}" class="btn btn-green mt-2">Browse Products</a>
+    {% endif %}
+</div>
+{% endif %}
+
+{% endblock %}
