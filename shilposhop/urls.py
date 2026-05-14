@@ -18,18 +18,24 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-#from . import views
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('about/', views.about, name='about'),
+    path('contact/', views.contact, name='contact'),
     path('products/', include('products_app.urls')),
     path('cart/', include('cart_app.urls')),
     path('invite/', include('invite_app.urls')),
     path('orders/', include('orders_app.urls')),
-    path('users/', include('users_app.urls')),
-    path('reviews/', include('reviews_app.urls')),
     path('payments/', include('payments_app.urls')),
+    path('reviews/', include('reviews_app.urls')),
     path('', views.home, name='home'),
+
+    path('users/', include('users_app.urls')),
+
+
+
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
