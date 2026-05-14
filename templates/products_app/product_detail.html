@@ -1,10 +1,116 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}{{ product.product_name }} - ShilpoShop{% endblock %}
 
-</body>
-</html>
+{% block content %}
+<p style="margin-bottom:16px;">
+    <a href="{% url 'product_list' %}">&larr; Back to Products</a>
+</p>
+<div class="detail-layout">
+    <div>
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.product_name }}" class="detail-img">
+        {% else %}
+            <div class="detail-img-placeholder">
+                {% if product.category.name == "Sarees" %}&#129525;
+                {% elif product.category.name == "Jewelry" %}&#128142;
+                {% elif product.category.name == "Pottery" %}&#129984;
+                {% elif product.category.name == "Leather Goods" %}&#128092;
+                {% elif product.category.name == "Nakshikantha Embroidery" %}&#129718;
+                {% elif product.category.name == "Home Decor" %}&#127968;
+                {% elif product.category.name == "Panjabis" %}&#128084;
+                {% else %}&#127873;
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="detail-info">
+        <div class="detail-category">{{ product.category.name }}</div>
+        <h1>{{ product.product_name }}</h1>
+        <div class="detail-price">&#2547; {{ product.price }}</div>
+        <p style="font-size:14px; margin-bottom:8px;">
+            {% if product.stock > 0 %}
+                <span class="in-stock">&#10003; In Stock — {{ product.stock }} available</span>
+            {% else %}
+                <span class="out-stock">&#10005; Out of Stock</span>
+            {% endif %}
+        </p>
+        <p class="detail-desc">{{ product.description }}</p>
+        <div class="buy-box">
+            <p style="font-size:13px; color:#555; margin-bottom:12px;">
+                Fair Trade product — handmade by skilled artisans
+            </p>
+
+            {% if user.is_authenticated %}
+                {% if user.is_staff %}
+                    <p class="text-muted" style="font-size:13px;">
+                        &#128274; Admin accounts cannot place orders. Use the edit/delete buttons below to manage this product.
+                    </p>
+                {% elif product.stock > 0 %}
+                    <div class="flex gap-1" style="flex-wrap:wrap;">
+                        <a href="{% url 'add_to_cart' product.id %}" class="btn btn-orange">
+                            Add to Cart
+                        </a>
+                        <a href="{% url 'create_order' product.id %}" class="btn btn-green">
+                            Buy Now
+                        </a>
+                    </div>
+                {% else %}
+                    <p style="color:#c62828; font-weight:bold;">This item is out of stock.</p>
+                {% endif %}
+            {% else %}
+                <p style="font-size:14px; margin-bottom:10px; color:#555;">
+                    Please login to purchase this item.
+                </p>
+                <a href="{% url 'login' %}" class="btn btn-green">Login to Buy</a>
+            {% endif %}
+        </div>
+        {% if user.is_staff %}
+        <div class="flex gap-1 mt-2">
+            <a href="{% url 'product_edit' product.id %}" class="btn btn-gray btn-sm">Edit Product</a>
+            <a href="{% url 'product_delete' product.id %}" class="btn btn-red btn-sm">Delete Product</a>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+<h2 style="color:#1b5e20; margin-bottom:14px;">Customer Reviews ({{ reviews|length }})</h2>
+
+{% if user.is_authenticated %}
+<div style="margin-bottom:16px;">
+    <a href="{% url 'add_review' product.id %}" class="btn btn-outline-green btn-sm">
+        + Write a Review
+    </a>
+</div>
+{% endif %}
+
+{% if reviews %}
+    {% for review in reviews %}
+    <div class="review-card">
+        <div class="review-top">
+            <div>
+                <span class="reviewer-name">{{ review.user.username }}</span>
+                <div class="stars">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= review.rating %}
+                            &#9733;
+                        {% else %}
+                            <span class="star-empty">&#9733;</span>
+                        {% endif %}
+                    {% endfor %}
+                    <span style="font-size:13px; color:#777;">({{ review.rating }}/5)</span>
+                </div>
+            </div>
+            {% if user == review.user %}
+            <a href="{% url 'delete_review' review.id %}" class="btn btn-red btn-sm">Delete</a>
+            {% endif %}
+        </div>
+        <p style="font-size:14px; color:#555;">{{ review.comment }}</p>
+    </div>
+    {% endfor %}
+{% else %}
+<div class="empty-state" style="padding:24px;">
+    <p>No reviews yet. Be the first to review this product!</p>
+</div>
+{% endif %}
+
+{% endblock %}
