@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Payments - ShilpoShop{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <div>
+        <h1>Payments</h1>
+        <p>{{ payments|length }} payment(s) found</p>
+    </div>
+    <a href="{% url 'order_list' %}" class="btn btn-outline-green btn-sm">View Orders</a>
+</div>
+
+{% if payments %}
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Payment ID</th>
+                <th>Order ID</th>
+                <th>Product</th>
+                <th>Method</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for payment in payments %}
+            <tr>
+                <td><strong>#{{ payment.id }}</strong></td>
+                <td>#{{ payment.order.id }}</td>
+                <td>{{ payment.order.product.product_name }}</td>
+                <td>{{ payment.payment_method }}</td>
+                <td><strong>&#2547; {{ payment.amount }}</strong></td>
+                <td>
+                    {% if payment.payment_status == "Completed" %}
+                        <span class="badge badge-green">{{ payment.payment_status }}</span>
+                    {% else %}
+                        <span class="badge badge-orange">{{ payment.payment_status }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'delete_payment' payment.id %}"
+                       class="btn btn-red btn-sm">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% else %}
+<div class="empty-state">
+    <div class="empty-icon">&#128179;</div>
+    <p>No payments yet.</p>
+    <a href="{% url 'order_list' %}" class="btn btn-green mt-2">Pay for Your Orders</a>
+</div>
+{% endif %}
+
+{% endblock %}

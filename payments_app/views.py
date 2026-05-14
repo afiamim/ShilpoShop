@@ -6,7 +6,6 @@ from .models import Payment
 from .forms import PaymentForm
 from orders_app.models import Order
 
-
 @login_required
 def payment_create(request, order_id):
 
@@ -80,7 +79,6 @@ def payment_list(request):
     return render(request, 'payments_app/payment_list.html', {
         'payments': payments
     })
-
 
 @login_required
 def delete_payment(request, id):

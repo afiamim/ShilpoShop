@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Write a Review - ShilpoShop{% endblock %}
+{% block content %}
+
+<div class="form-container">
+    <h2>Write a Review</h2>
+    <p class="text-center text-muted" style="margin-bottom:16px;">
+        Reviewing: <strong>{{ product.product_name }}</strong>
+    </p>
+    <form method="POST" novalidate>
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="field-row">
+            <label>{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    <div class="form-error">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <div class="flex gap-1 mt-2">
+            <button type="submit" class="btn btn-green">Submit Review</button>
+            <a href="{% url 'product_detail' product.id %}" class="btn btn-gray">Cancel</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
