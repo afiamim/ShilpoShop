@@ -33,8 +33,21 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'products_app',
     'cart_app',
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 675831a8580c39c6649fa68e15ed87a677c36973
     'invite_app',
     'orders_app',
+<<<<<<< HEAD
+=======
+>>>>>>> 943836fb5c2fbc25980568eddabd673115d3075b
+=======
+    'users_app',
+    'orders_app',
+>>>>>>> ed870bc435b70d122e329176817323859c94b766
+>>>>>>> 675831a8580c39c6649fa68e15ed87a677c36973
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

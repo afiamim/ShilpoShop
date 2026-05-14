@@ -24,8 +24,20 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('products/', include('products_app.urls')),
     path('cart/', include('cart_app.urls')),
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 675831a8580c39c6649fa68e15ed87a677c36973
     path('invite/', include('invite_app.urls')),
     path('orders/', include('orders_app.urls')),
+<<<<<<< HEAD
+=======
+>>>>>>> 943836fb5c2fbc25980568eddabd673115d3075b
+=======
+    path('orders/', include('orders_app.urls')),
+>>>>>>> ed870bc435b70d122e329176817323859c94b766
+>>>>>>> 675831a8580c39c6649fa68e15ed87a677c36973
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
