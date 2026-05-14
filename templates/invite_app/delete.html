@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Remove Invite – ShilpoShop{% endblock %}
+
+{% block content %}
+<div class="confirm-box">
+    <h2>&#128465; Remove Invite?</h2>
+    <p>Are you sure you want to remove the invite sent to <strong>{{ invite.email }}</strong>?</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-red">Yes, Remove</button>
+        <a href="{% url 'invite_home' %}" class="btn btn-gray" style="margin-left:8px;">Cancel</a>
+    </form>
+</div>
+{% endblock %}

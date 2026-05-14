@@ -1,0 +1,303 @@
+{% extends 'base.html' %}
+{% block title %}Invite Friends & Earn – ShilpoShop{% endblock %}
+
+{% block content %}
+
+
+<div class="page-heading">
+    <div>
+        <h1>&#127873; Invite Friends &amp; Earn 5% Discount</h1>
+        <p>Invite 3 friends who join ShilpoShop and get a 5% coupon on your next order.</p>
+    </div>
+</div>
+
+
+
+<div class="white-box mb-2">
+    <div class="white-box-header">How It Works</div>
+    <div class="white-box-body">
+        <div class="three-col" style="text-align:center;">
+
+            <div style="padding:10px;">
+                <div style="font-size:34px; margin-bottom:8px;">&#9993;</div>
+                <strong style="color:#1b5e20;">Step 1 — Invite</strong>
+                <p style="font-size:13px; color:#555; margin-top:6px;">
+                    Enter your friend's email and send them an invite.
+                </p>
+            </div>
+
+            <div style="padding:10px;">
+                <div style="font-size:34px; margin-bottom:8px;">&#128101;</div>
+                <strong style="color:#1b5e20;">Step 2 — They Join</strong>
+                <p style="font-size:13px; color:#555; margin-top:6px;">
+                    Once 3 friends register, click "Mark Joined" for each.
+                </p>
+            </div>
+
+            <div style="padding:10px;">
+                <div style="font-size:34px; margin-bottom:8px;">&#127881;</div>
+                <strong style="color:#1b5e20;">Step 3 — Get Coupon</strong>
+                <p style="font-size:13px; color:#555; margin-top:6px;">
+                    Your 5% coupon unlocks automatically. Use it at checkout!
+                </p>
+            </div>
+
+        </div>
+
+
+        <div style="background:#fff8e1; border:1px solid #f9a825; border-radius:6px;
+                    padding:10px 16px; font-size:13px; color:#555; margin-top:12px;">
+            &#128161; <strong>Note:</strong> After you use the coupon on an order, it resets.
+            Invite 3 more new friends to earn your next 5% coupon.
+        </div>
+    </div>
+</div>
+
+
+
+<div class="stats-row">
+
+    <div class="stat-box">
+        <div class="stat-num">{{ invites.count }}</div>
+        <div class="stat-lbl">Total Invites Sent</div>
+    </div>
+
+    <div class="stat-box stat-orange">
+        <div class="stat-num">{{ current_joined }}/3</div>
+        <div class="stat-lbl">Friends Joined This Round</div>
+    </div>
+
+    <div class="stat-box {% if profile.discount_active %}stat-red{% endif %}">
+        {% if profile.discount_active %}
+            <div class="stat-num">5%</div>
+            <div class="stat-lbl">Coupon Active! &#127881;</div>
+        {% else %}
+            <div class="stat-num">&#128274;</div>
+            <div class="stat-lbl">No Coupon Yet</div>
+        {% endif %}
+    </div>
+
+    <div class="stat-box">
+        <div class="stat-num">{{ profile.total_rounds }}</div>
+        <div class="stat-lbl">Rounds Completed</div>
+    </div>
+
+</div>
+
+
+
+<div class="white-box mb-2">
+    <div class="white-box-header">
+        Current Round Progress — {{ current_joined }}/3 Friends Joined
+    </div>
+    <div class="white-box-body">
+        {% if profile.discount_active %}
+            <div style="background:#e8f5e9; border-radius:6px; padding:12px 16px;
+                        color:#1b5e20; font-size:14px; font-weight:bold;">
+                &#127881; Coupon unlocked! Use it when placing an order, then invite 3 more friends.
+            </div>
+        {% else %}
+            <div style="margin-bottom:6px; font-size:13px; color:#555;">
+                Invite {{ still_needed }} more friend{{ still_needed|pluralize }} to unlock your coupon.
+            </div>
+            <div class="progress-bar-wrap">
+                <div class="progress-bar-fill bar-green"
+                     style="width:{% widthratio current_joined 3 100 %}%;"></div>
+            </div>
+            <div style="display:flex; justify-content:space-between;
+                        font-size:12px; color:#aaa; margin-top:4px;">
+                <span>0 friends</span>
+                <span>3 friends</span>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+
+
+<div class="two-col">
+
+    <!-- LEFT: Referral code + send invite form -->
+    <div class="white-box">
+        <div class="white-box-header">Your Referral Code &amp; Send Invite</div>
+        <div class="white-box-body">
+
+            <!-- Referral Code Box -->
+            <div style="background:#f9fff9; border:2px solid #a5d6a7; border-radius:6px;
+                        padding:16px; text-align:center; margin-bottom:20px;">
+                <div style="font-size:12px; color:#777; text-transform:uppercase;
+                            letter-spacing:1px; margin-bottom:6px;">
+                    Share this code with your friends
+                </div>
+                <div id="refCode" style="font-size:22px; font-weight:bold; color:#1b5e20;
+                              letter-spacing:4px; font-family:monospace;">
+                    {{ profile.referral_code }}
+                </div>
+                <div style="font-size:12px; color:#777; margin-top:6px;">
+                    Friends enter this code when they register on ShilpoShop
+                </div>
+                <button class="btn btn-green btn-sm" style="margin-top:10px;"
+                        onclick="copyCode()">
+                    &#128203; Copy Code
+                </button>
+            </div>
+
+
+            <form method="POST" action="{% url 'send_invite' %}">
+                {% csrf_token %}
+                <div class="field-row">
+                    <label>Friend's Email Address</label>
+                    <input type="email" name="email"
+                           placeholder="friend@example.com" required>
+                </div>
+                <button type="submit" class="btn btn-green btn-block mt-1">
+                    &#9993; Send Invite
+                </button>
+            </form>
+
+        </div>
+    </div>
+
+
+    <div class="white-box">
+        <div class="white-box-header">Your Discount Coupon</div>
+        <div class="white-box-body" style="text-align:center;">
+
+            {% if profile.discount_active %}
+
+                <!-- Coupon is active -->
+                <div style="background:linear-gradient(to right, #1b5e20, #2e7d32);
+                            color:#fff; border-radius:8px; padding:28px 20px;">
+                    <div style="font-size:15px; margin-bottom:4px;">
+                        &#127881; Coupon Unlocked!
+                    </div>
+                    <div style="font-size:56px; font-weight:bold; color:#ffcc02;
+                                line-height:1.1;">
+                        5%
+                    </div>
+                    <div style="font-size:15px; margin-top:4px;">
+                        OFF your next order
+                    </div>
+                    <div style="background:rgba(255,255,255,0.2); border-radius:6px;
+                                display:inline-block; padding:8px 20px; margin-top:14px;
+                                font-size:18px; font-family:monospace; font-weight:bold;
+                                letter-spacing:3px;">
+                        {{ profile.discount_code }}
+                    </div>
+                    <div style="font-size:12px; margin-top:10px; opacity:0.85;">
+                        Enter this code when you place an order
+                    </div>
+                </div>
+
+                <p class="text-muted mt-2" style="font-size:12px;">
+                    After using the coupon, it resets. Invite 3 more friends to earn your next one!
+                </p>
+
+            {% else %}
+
+
+                <div style="padding:24px;">
+                    <div style="font-size:48px; margin-bottom:10px;">&#128274;</div>
+                    <p style="font-size:15px; color:#555;">
+                        Invite <strong>{{ still_needed }}</strong> more
+                        friend{{ still_needed|pluralize }} to unlock a 5% coupon!
+                    </p>
+                    <div style="font-size:36px; font-weight:bold; color:#bdbdbd;
+                                margin-top:12px;">
+                        5% OFF
+                    </div>
+                    <p class="text-muted mt-1" style="font-size:12px;">
+                        The coupon will appear here once 3 friends join.
+                    </p>
+                </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+
+
+<div class="page-heading" style="margin-top:8px;">
+    <h1 style="font-size:18px;">Invite History</h1>
+</div>
+
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Friend Email</th>
+                <th>Invited On</th>
+                <th>Status</th>
+                <th>Joined Date</th>
+                <th>Counted</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if invites %}
+                {% for inv in invites %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ inv.email }}</td>
+                    <td>{{ inv.sent_on }}</td>
+                    <td>
+                        <span class="badge
+                            {% if inv.status == 'joined' %}badge-green{% else %}badge-orange{% endif %}">
+                            {{ inv.get_status_display }}
+                        </span>
+                    </td>
+                    <td>{{ inv.joined_on|default:"—" }}</td>
+                    <td>
+                        {% if inv.counted %}
+                            <span class="badge badge-green">Counted &#10003;</span>
+                        {% elif inv.status == 'joined' %}
+                            <span class="badge badge-orange">This Round</span>
+                        {% else %}
+                            <span style="color:#aaa;">—</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if inv.status == 'pending' %}
+                            <a href="{% url 'mark_joined' inv.id %}"
+                               class="btn btn-green btn-sm">
+                                &#10003; Mark Joined
+                            </a>
+                        {% endif %}
+                        <a href="{% url 'delete_invite' inv.id %}"
+                           class="btn btn-red btn-sm">
+                            Remove
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted" style="padding:28px;">
+                        No invites yet. Send your first invite above!
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+
+
+<script>
+function copyCode() {
+    var code = document.getElementById('refCode').textContent.trim();
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(code).then(function() {
+            alert('Copied! Your referral code: ' + code);
+        });
+    } else {
+        prompt('Copy your referral code:', code);
+    }
+}
+</script>
+
+{% endblock %}
