@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Make Payment – ShilpoShop{% endblock %}
+{% block content %}
+
+<div class="form-container" style="max-width:520px;">
+    <h2>Make Payment</h2>
+
+    <!-- Order Summary -->
+    <div class="white-box" style="margin-bottom:20px;">
+        <div class="white-box-header">Order Summary</div>
+        <div class="white-box-body" style="font-size:14px; color:#444; line-height:2;">
+
+            <p><strong>Order #:</strong> {{ order.id }}</p>
+            <p><strong>Product:</strong> {{ order.product.product_name }}</p>
+            <p><strong>Quantity:</strong> {{ order.quantity }}</p>
+            <p><strong>Original Price:</strong> &#2547; {{ order.total_price }}</p>
+
+            {% if order.discount_amount > 0 %}
+                <p style="color:#2e7d32;">
+                    <strong>5% Coupon Discount:</strong>
+                    &minus;&#2547; {{ order.discount_amount }}
+                    <span class="badge badge-green" style="font-size:11px;">
+                        {{ order.discount_code }}
+                    </span>
+                </p>
+            {% endif %}
+
+            <p style="font-size:20px; font-weight:bold; color:#c62828;">
+                You Pay: &#2547; {{ order.final_price }}
+            </p>
+
+        </div>
+    </div>
+    <!-- Payment Method Form -->
+    <form method="POST" novalidate>
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div class="field-row">
+            <label>{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    <div class="form-error">{{ error }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-green btn-block" style="margin-top:14px;">
+            Confirm Payment — &#2547; {{ order.final_price }}
+        </button>
+    </form>
+    {% if order.discount_amount > 0 %}
+        <div style="background:#e8f5e9; border-radius:6px; padding:10px 14px;
+                    margin-top:12px; font-size:13px; color:#1b5e20; text-align:center;">
+            &#127881; You are saving &#2547;{{ order.discount_amount }} with your 5% coupon!
+            After payment, your coupon resets — invite 3 more friends to earn another one.
+        </div>
+    {% endif %}
+
+    <p class="text-center text-muted mt-1" style="font-size:12px;">
+        Payments are simulated. No real money is charged.
+    </p>
+</div>
+
+{% endblock %}

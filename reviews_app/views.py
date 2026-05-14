@@ -8,9 +8,6 @@ from .forms import ReviewForm
 
 from products_app.models import Product
 
-
-# Add Review
-
 def add_review(request, product_id):
 
     product = get_object_or_404(Product, id=product_id)
@@ -41,8 +38,6 @@ def add_review(request, product_id):
     })
 
 
-# Review List
-
 def review_list(request, product_id):
 
     product = get_object_or_404(Product, id=product_id)
@@ -54,8 +49,6 @@ def review_list(request, product_id):
         'product': product
     })
 
-
-# Delete Review
 
 def delete_review(request, id):
 
