@@ -1,34 +1,10 @@
-{% extends 'base.html' %}
-{% block title %}{% if product %}Edit{% else %}Add{% endif %} Product - ShilpoShop{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
 
-{% block content %}
-
-<div class="form-container" style="max-width:600px;">
-    <h2>{% if product %}Edit Product{% else %}Add New Product{% endif %}</h2>
-    <form method="POST" enctype="multipart/form-data" novalidate>
-        {% csrf_token %}
-        {% for field in form %}
-        <div class="field-row">
-            <label>{{ field.label }}</label>
-            {{ field }}
-            {% if field.errors %}
-                {% for error in field.errors %}
-                    <div class="form-error">{{ error }}</div>
-                {% endfor %}
-            {% endif %}
-        </div>
-        {% endfor %}
-        {% if product and product.image %}
-        <div class="field-row">
-            <label>Current Image</label>
-            <img src="{{ product.image.url }}" alt="current"
-                 style="max-width:180px; border-radius:4px; border:1px solid #e0e0e0; margin-top:4px;">
-        </div>
-        {% endif %}
-        <div class="flex gap-1 mt-2">
-            <button type="submit" class="btn btn-green">Save Product</button>
-            <a href="{% url 'product_list' %}" class="btn btn-gray">Cancel</a>
-        </div>
-    </form>
-</div>
-{% endblock %}
+</body>
+</html>

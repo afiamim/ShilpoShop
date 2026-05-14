@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block title %}ShilpoShop - Fair Trade Bangladesh{% endblock %}
+
+{% block content %}
+
+<div class="hero">
+    <h1>Welcome to ShilpoShop</h1>
+    <p>Authentic Handcraft &bull; Ethical Shopping &bull; Fair Trade</p>
+    <p>Sarees &bull; Jewelry &bull; Nakshikantha &bull; Pottery &bull; Leather &bull; Home Decor</p>
+    <p class="hero-sub">Every purchase directly supports artisan communities across Bangladesh</p>
+    <a href="{% url 'product_list' %}" class="btn btn-orange btn-lg">Shop All Products</a>
+</div>
+
+
+{% if categories %}
+<div class="white-box mb-2">
+    <div class="white-box-header">Shop by Category</div>
+    <div class="white-box-body flex gap-1" style="flex-wrap:wrap;">
+        <a href="{% url 'product_list' %}" class="btn btn-outline-green btn-sm">All</a>
+        {% for cat in categories %}
+            <a href="{% url 'product_list' %}?category={{ cat.id }}" class="btn btn-outline-green btn-sm">
+                {{ cat.name }}
+            </a>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+
+<h2 style="margin-bottom:14px; color:#1b5e20;">Featured Products</h2>
+
+{% if products %}
+<div class="product-grid">
+    {% for product in products %}
+    <div class="product-card">
+
+
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.product_name }}" class="product-card-img">
+        {% else %}
+            <div class="product-card-placeholder">
+                {% if product.category.name == "Sarees" %}&#129525;
+                {% elif product.category.name == "Jewelry" %}&#128142;
+                {% elif product.category.name == "Pottery" %}&#129984;
+                {% elif product.category.name == "Leather Goods" %}&#128092;
+                {% elif product.category.name == "Nakshikantha Embroidery" %}&#129718;
+                {% elif product.category.name == "Home Decor" %}&#127968;
+                {% elif product.category.name == "Panjabis" %}&#128084;
+                {% else %}&#127873;
+                {% endif %}
+            </div>
+        {% endif %}
+
+
+        <div class="product-card-body">
+            <div class="product-card-category">{{ product.category.name }}</div>
+            <div class="product-card-name">{{ product.product_name }}</div>
+            <div class="product-card-desc">{{ product.description|truncatewords:15 }}</div>
+            <div class="product-card-price">&#2547; {{ product.price }}</div>
+            {% if product.stock > 0 %}
+                <div class="in-stock">&#10003; In Stock ({{ product.stock }})</div>
+            {% else %}
+                <div class="out-stock">&#10005; Out of Stock</div>
+            {% endif %}
+        </div>
+
+
+        <div class="product-card-actions">
+            <a href="{% url 'product_detail' product.id %}" class="btn btn-green btn-sm">View</a>
+            {% if user.is_authenticated and product.stock > 0 %}
+                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-orange btn-sm">+ Cart</a>
+            {% endif %}
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+
+<div class="text-center mb-3">
+    <a href="{% url 'product_list' %}" class="btn btn-outline-green">View All Products</a>
+</div>
+
+{% else %}
+<div class="empty-state">
+    <div class="empty-icon">&#128722;</div>
+    <p>No products yet. Run <strong>python manage.py seed_data</strong> to add sample products.</p>
+</div>
+{% endif %}
+
+
+<div class="two-col">
+    <div class="white-box">
+        <div class="white-box-header">Our Mission</div>
+        <div class="white-box-body" style="font-size:14px; color:#555; line-height:1.8;">
+            ShilpoShop is a social enterprise and fair trade retail chain connecting
+            skilled artisans across Bangladesh with conscious consumers.
+            We ensure artisans receive fair wages and preserve centuries-old craft traditions.
+        </div>
+    </div>
+    <div class="white-box">
+        <div class="white-box-header">Why Buy From Us</div>
+        <div class="white-box-body" style="font-size:14px; color:#555; line-height:2;">
+            &#10003; 100% Handmade &amp; Ethically Sourced<br>
+            &#10003; Genuine Bangladeshi Heritage Crafts<br>
+            &#10003; Fair Price Direct to Artisan<br>
+            &#10003; Eco-Friendly Packaging<br>
+            &#10003; Women Artisan Empowerment
+        </div>
+    </div>
+</div>
+
+{% endblock %}
