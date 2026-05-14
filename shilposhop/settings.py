@@ -34,13 +34,13 @@ INSTALLED_APPS = [
     'products_app',
     'cart_app',
 
-    'invite_app',
+
     'orders_app',
 
 
     'users_app',
     'invite_app',
-    'orders_app',
+
 
 
     'payments_app',
