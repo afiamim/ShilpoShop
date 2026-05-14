@@ -28,7 +28,13 @@ urlpatterns = [
     path('cart/', include('cart_app.urls')),
     path('invite/', include('invite_app.urls')),
     path('orders/', include('orders_app.urls')),
-    path('orders/', include('orders_app.urls')),
+    path('payments/', include('payments_app.urls')),
+    path('reviews/', include('reviews_app.urls')),
+    path('', views.home, name='home'),
+
+    path('users/', include('users_app.urls')),
+
+
 
 
 ]
